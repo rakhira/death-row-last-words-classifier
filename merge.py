@@ -23,7 +23,7 @@ for i, csv in enumerate(csv_names):
 
 df0 = dfs[0]
 df1 = dfs[1]
-df2 = dfs[2]
+final_df = dfs[2]
 # df3 = dfs[3]
 # df4 = dfs[4]
 # df5 = dfs[5]
@@ -43,15 +43,18 @@ labels = ['Birth to Five Years Old', 'Six to Twelve Years Old', 'Thirteen to Sev
 final_df['Age Group'] = pd.cut(final_df['Age'], bins, labels=labels)
 final_df.drop(['Age'], axis=1, inplace=True)
 
+# # %%
+# type_subs_care_count = final_df.groupby(['Fiscal Year','Region', 'Gender', 'Race/Ethnicity', 'Age Group', 'Type of Substitute Care']).count()['Placed with Relative']
+# # pd.pivot_table(type_subs_care_count, values=type_subs_care_count['Type of Substitute Care'], index = ['Fiscal Year', 'Region', 'Gender', 'Race/Ethnicity', 'Age Group'])
+# df_new = pd.pivot_table(type_subs_care_count, values='Type of Substitute Care', index = ['Fiscal Year', 'Region', 'Gender', 'Race/Ethnicity', 'Age Group'])
+# df_new.head()
 # %%
-type_subs_care_count = final_df.groupby(['Fiscal Year','Region', 'Gender', 'Race/Ethnicity', 'Age Group', 'Type of Substitute Care']).count()['Placed with Relative']
-# pd.pivot_table(type_subs_care_count, values=type_subs_care_count['Type of Substitute Care'], index = ['Fiscal Year', 'Region', 'Gender', 'Race/Ethnicity', 'Age Group'])
-df_new = pd.pivot_table(type_subs_care_count, values='Type of Substitute Care', index = ['Fiscal Year', 'Region', 'Gender', 'Race/Ethnicity', 'Age Group'])
-df_new.head()
-# %%
-pd.pivot_table(final_df, values='Placed with Relative', index = ['Fiscal Year', 'Region', 'Gender', 'Race/Ethnicity', 'Age Group'], columns=['Type of Substitute Care'], aggfunc='count')
+final_df1 = pd.pivot_table(final_df, values='Placed with Relative', index = ['Fiscal Year', 'Region', 'Gender', 'Race/Ethnicity', 'Age Group'], columns=['Type of Substitute Care'], aggfunc='count')
+final_df2 = pd.pivot_table(final_df1, values='Type of Substitute Care', index = ['Fiscal Year', 'Region', 'Gender', 'Race/Ethnicity', 'Age Group'], columns=['Placed with Relative'], aggfunc='count')
 # %%
 type_subs_care_count.reset_index()
+# %%
+final_df2.head()
 # %%
 type(type_subs_care_count)# %%
 
