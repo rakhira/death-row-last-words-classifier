@@ -50,7 +50,9 @@ final_df.drop(['Age'], axis=1, inplace=True)
 # df_new.head()
 # %%
 final_df1 = pd.pivot_table(final_df, values='Placed with Relative', index = ['Fiscal Year', 'Region', 'Gender', 'Race/Ethnicity', 'Age Group'], columns=['Type of Substitute Care'], aggfunc='count')
-final_df2 = pd.pivot_table(final_df1, values='Type of Substitute Care', index = ['Fiscal Year', 'Region', 'Gender', 'Race/Ethnicity', 'Age Group'], columns=['Placed with Relative'], aggfunc='count')
+# %%
+final_df2 = pd.pivot_table(final_df, values='Type of Substitute Care', index = ['Fiscal Year', 'Region', 'Gender', 'Race/Ethnicity', 'Age Group'], columns=['Placed with Relative'], aggfunc='count')
+type(final_df2.head())
 # %%
 type_subs_care_count.reset_index()
 # %%
