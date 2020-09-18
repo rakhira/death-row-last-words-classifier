@@ -127,7 +127,7 @@ y_pred = rf.predict(X_test)
 
 np.sqrt(metrics.mean_squared_error(y_test, y_pred))
 # %%
-# GridSearchCV
+GridSearchCV
 
 hyperparameters = {'max_depth': [2, 3, 4, 5],  
                    'max_features': ['sqrt', 'log2', None], 
@@ -138,17 +138,29 @@ gridsearch.fit(X_train, y_train)
 print("best parameters:", gridsearch.best_params_)
 best_rf_model = gridsearch.best_estimator_
 # %%
-ridge = Ridge(alpha=0)
+
+X = df_BHA[cols].values
+y = df_BHA['Percent of Kids in Consummated Adoptions'].values
+
+# scaler = StandardScaler()
+
+# #transform data
+# scaled = scaler.fit_transform(X)
+# scaled
+# %%
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+# %%
+# ridge = Ridge(alpha=0, normalize=)
 ridge.fit(X_train, y_train)
-ridge_df = pd.DataFrame({'variable': df_above_0.iloc[:,5:25].columns, 'estimate': ridge.coef_})
+ridge_df = pd.DataFrame({'variable': df_BHA[cols].columns, 'estimate': ridge.coef_})
 ridge_train_pred = []
 ridge_test_pred = []
 
 # iterate lambdas
 
-for alpha in np.arange(0, 200, 1):
+for alpha in np.arange(0.001, 10, .1):
     # training
-    ridge_reg = Ridge(alpha=alpha)
+    ridge_reg = Ridge(alpha=alpha, normalize=True)
     ridge_reg.fit(X_train, y_train)
     var_name = 'estimate' + str(alpha)
     ridge_df[var_name] = ridge_reg.coef_
@@ -157,10 +169,8 @@ for alpha in np.arange(0, 200, 1):
     ridge_test_pred.append(ridge_reg.predict(X_test))
 
 # organize dataframe
-ridge_df = ridge_df.set_index('variable').T.rename_axis('estimate', 1).rename_axis(None, 1).set_index('variable')
-
-# %%
-ridge_df.set_index('variable')
+# ridge_df = ridge_df.set_index('variable').T.rename_axis('estimate', 1).rename_axis(None, 1).set_index('variable')
+ridge_df = ridge_df.set_index('variable')
 # %%
 ridge_df.head()
 # %%
@@ -169,11 +179,11 @@ ridge_test_pred
 ridge_df.iloc[1,:].values
 # %%
 fig, ax = plt.subplots(figsize=(10, 5))
-counter = 0
+# counter = 0
 for i in range(len(ridge_df)):
-    ax.plot(np.arange(0,201,1), ridge_df.iloc[i,1:])
-    counter += 1
-    print(counter)
+    ax.plot(np.arange(0.001,10,.1), ridge_df.iloc[i,1:])
+    # counter += 1
+    # print(counter)
 # %%
 # plot betas by lambda
 fig, ax = plt.subplots(figsize=(10, 5))
@@ -300,7 +310,7 @@ lasso_pipe.fit(X_train, y_train)
 print('Training score: {}'.format(lasso_pipe.score(X_train, y_train)))
 print('Test score: {}'.format(lasso_pipe.score(X_test, y_test)))
 # %%
-xgb = xgb.XGBRegressor(n_estimators=100, reg_lambda=1, gamma=0, max_depth=3)
+xgb = xgb.XGBRegressor(n_estimators=1000, reg_lambda=1, gamma=0, max_depth=3, learning_rate=0.1)
 xgb.fit(X_train, y_train)
 # %%
 pd.DataFrame(xgb.feature_importances_.reshape(1, -1), columns=cols)
@@ -310,25 +320,25 @@ y_pred_xgb = xgb.predict(X_test)
 xgb_rmse = np.sqrt(mean_squared_error(y_test, y_pred_xgb))
 xgb_rmse
 # %%
-def algorithm_pipeline(X_train_data, X_test_data, y_train_data, y_test_data, 
-                       model, param_grid, cv=10, scoring_fit='neg_mean_squared_error',
-                       do_probabilities = False):
-    gs = GridSearchCV(
-        estimator=model,
-        param_grid=param_grid, 
-        cv=cv, 
-        n_jobs=-1, 
-        scoring=scoring_fit,
-        verbose=2
-    )
-    fitted_model = gs.fit(X_train_data, y_train_data)
+# def algorithm_pipeline(X_train_data, X_test_data, y_train_data, y_test_data, 
+#                        model, param_grid, cv=10, scoring_fit='neg_mean_squared_error',
+#                        do_probabilities = False):
+#     gs = GridSearchCV(
+#         estimator=model,
+#         param_grid=param_grid, 
+#         cv=cv, 
+#         n_jobs=-1, 
+#         scoring=scoring_fit,
+#         verbose=2
+#     )
+#     fitted_model = gs.fit(X_train_data, y_train_data)
     
-    # if do_probabilities:
-    #   pred = fitted_model.predict_proba(X_test_data)
-    # else:
-    pred = fitted_model.predict(X_test_data)
+#     # if do_probabilities:
+#     #   pred = fitted_model.predict_proba(X_test_data)
+#     # else:
+#     pred = fitted_model.predict(X_test_data)
     
-    return fitted_model, pred
+#     return fitted_model, pred
 # %%
 
 # %%
