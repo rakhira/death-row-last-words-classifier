@@ -19,7 +19,33 @@ df['Percent of Kids in Consummated Adoptions'] = 100*((df['Same Race/Ethnicity a
 # %%
 df.info()
 # %%
-pd.df.to_csv('data/df.csv')
+df.fillna(0, inplace=True)
+# %%
+df_0 = df[df['Percent of Kids in Consummated Adoptions']==0]
+# %%
+df_0.head()
+# %%
+df_0.info()
+# %%
+df_0['Region'].value_counts()
+# %%
+df_0['Number of Kids in Substitute Care'].value_counts(ascending=False).mean()
+# %%
+# majority of 0s are for Asian and Other, 10-15% for other races
+df_0['Race/Ethnicity'].value_counts()
+# %%
+df['Race/Ethnicity'].value_counts()
+# %%
+df_0['Age Group'].value_counts()
+# %%
+model_df = pd.get_dummies(df, columns=['Fiscal Year', 'Region', 'Race/Ethnicity', 'Age Group', 'Gender'])
+# %%
+model_df.head()
+# %%
+model_df.info()
+# %%
+model_df.to_csv('data/model_df.csv')
+# %%
 # %%
 sns.distplot(df['Percent of Kids in Consummated Adoptions']).set_title('Distribution of Percent of Kids in Consummated Adoptions')
 # %%
@@ -33,8 +59,8 @@ sns.catplot(x='Race/Ethnicity', y='Same Race/Ethnicity as Adoptive Parent', data
 # %%
 sns.catplot(x="Race/Ethnicity", y="Percent of Kids in Consummated Adoptions", hue="Gender", kind="swarm", data=df)
 # %%
-fig, ax = plt.subplots(figsize = (15, 20))
-ax = sns.catplot(x="Region", y="Percent of Kids in Consummated Adoptions", hue="Gender", kind="swarm", data=df, figsize = ())
+# fig, ax = plt.subplots(figsize = (15, 20))
+# ax = sns.catplot(x="Region", y="Percent of Kids in Consummated Adoptions", hue="Gender", kind="swarm", data=df, figsize = ())
 # %%
 sns.catplot(x="Race/Ethnicity", y="Percent of Kids in Consummated Adoptions", hue="Gender", kind="box", data=df)
 # %%
@@ -58,7 +84,7 @@ sns.catplot(x='Gender', y='Percent of Kids in Consummated Adoptions', hue="Age G
 # df[df['Race/Ethnicity'] == 'African American'].nunique(df['Age Group'])
 # %%
 # do a scatter matrix on continuous variables
-sns.pairplot(df, hue='Region')
+sns.pairplot(df, hue='Gender')
 # %%
 df.value_counts()
 # %%
@@ -107,3 +133,4 @@ df[(df['Race/Ethnicity'] == 'African American') & (df['Age Group'] == 'Birth to 
 # %%
 sns.pairplot(df, hue='Gender')
 # %%
+df.fillna(0, inplace=True)
