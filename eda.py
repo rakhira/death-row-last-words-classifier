@@ -72,7 +72,7 @@ sns.catplot(x="Race/Ethnicity", y="Percent of Kids in Consummated Adoptions", hu
 # %%
 sns.catplot(x="Race/Ethnicity", y="Percent of Kids in Consummated Adoptions", hue="Gender", kind="bar", data=df)
 # %%
-sns.catplot(x="Race/Ethnicity", y="Percent of Kids in Consummated Adoptions", hue="Gender", kind="box", data=df)
+sns.catplot(x="Race/Ethnicity", y="Percent of Kids in Consummated Adoptions", hue="Age Group", kind="box", data=df)
 # %%
 sns.catplot(x="Race/Ethnicity", y="Percent of Kids in Consummated Adoptions", hue="Gender", kind="bar", data=df)
 # %%
@@ -107,6 +107,7 @@ df[df['Race/Ethnicity'] == 'Asian']['Age Group'].value_counts()
 df[df['Race/Ethnicity'] == 'Asian']['Region'].value_counts(ascending=True)
 df[df['Race/Ethnicity'] == 'Asian']['Gender'].value_counts()
 df[df['Race/Ethnicity'] == 'Asian']['Fiscal Year'].value_counts()
+df[df['Race/Ethnicity'] == 'Asian']['Number of Total Kids'].value_counts()
 # %%
 df[df['Race/Ethnicity'] == 'Other']['Age Group'].value_counts()
 df[df['Race/Ethnicity'] == 'Other']['Region'].value_counts(ascending=True)
@@ -134,3 +135,18 @@ df[(df['Race/Ethnicity'] == 'African American') & (df['Age Group'] == 'Birth to 
 sns.pairplot(df, hue='Gender')
 # %%
 df.fillna(0, inplace=True)
+# %%
+df['Number of Total Kids'] = df['Number of Kids in Substitute Care'] + df['Number of Consummated Adoptions']
+# %%
+count_plot = df.groupby(['Race/Ethnicity', 'Age Group']).sum()['Number of Total Kids']
+# %%
+count_plot = count_plot.reset_index(drop=False)
+sns.barplot(y='Race/Ethnicity', x='Number of Total Kids', data=count_plot, hue='Age Group')
+plt.legend(bbox_to_anchor=(1.01, 1),borderaxespad=0)
+# %%
+sns.countplot(x=df.groupby('Race/Ethnicity', 'Age Group').sum()['Number of Kids in Substitute Care'], data=df, hue='Age Group')
+# %%
+ax = sns.catplot(x="Number of Total Kids", data=df, hue='Age Group', col='Race/Ethnicity')
+# %%
+df['Percent of Kids in Consummated Adoptions'].mean()
+# %%

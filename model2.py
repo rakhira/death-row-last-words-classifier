@@ -27,6 +27,8 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
 # %%
+df = pd.read_csv('data/model_df.csv')
+# %%
 df_BHA = df[(df['Race/Ethnicity_Asian'] == 0) & (df['Race/Ethnicity_Other'] == 0)]
 # %%
 cols = [
@@ -51,15 +53,15 @@ cols = [
     #    'Region_5-Beaumont', 'Region_6-Houston', 'Region_7-Austin',
     #    'Region_8-San Antonio', 'Region_9-Midland',
        'Race/Ethnicity_African American', 'Race/Ethnicity_Anglo',
-       'Race/Ethnicity_Asian',
+    #    'Race/Ethnicity_Asian',
         'Race/Ethnicity_Hispanic',
-       'Race/Ethnicity_Other', 
+    #    'Race/Ethnicity_Other', 
         'Age Group_Birth to Five Years Old',
        'Age Group_Six to Twelve Years Old',
        'Age Group_Thirteen to Seventeen Years Old', 'Gender_Female',
        'Gender_Male' ]
-X = df[cols].values
-y = df['Percent of Kids in Consummated Adoptions'].values
+X = df_BHA[cols].values
+y = df_BHA['Percent of Kids in Consummated Adoptions'].values
 # %%
 len(df[cols].values)
 len(df['Percent of Kids in Consummated Adoptions'].values)
@@ -71,6 +73,9 @@ linear.fit(X_train, y_train)
 y_pred_linear = linear.predict(X_test)
 plt.scatter(y_test, y_pred_linear, color='gray')
 plt.scatter
+plt.xlabel('Actuals')
+plt.ylabel('Predictions')
+plt.title('Percent of Kids in Consummated Adoptions Based on Race/Ethnicity, Age Group, Gender')
 plt.show()
 linear_rmse = np.sqrt(metrics.mean_squared_error(y_test, y_pred_linear))
 print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred_linear))  
