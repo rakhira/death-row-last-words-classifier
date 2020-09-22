@@ -72,7 +72,9 @@ sns.catplot(x="Race/Ethnicity", y="Percent of Kids in Consummated Adoptions", hu
 # %%
 sns.catplot(x="Race/Ethnicity", y="Percent of Kids in Consummated Adoptions", hue="Gender", kind="bar", data=df)
 # %%
-sns.catplot(x="Race/Ethnicity", y="Percent of Kids in Consummated Adoptions", hue="Age Group", kind="box", data=df)
+fig, ax = plt.subplots(figsize=(15,20))
+sns.catplot(x="Race/Ethnicity", y="Percent of Kids in Consummated Adoptions", hue="Age Group", kind="box", data=df, ax=ax)
+plt.title('Percent of Kids in Consummated Adoptions by Gender and Race/Ethnicity')
 # %%
 sns.catplot(x="Race/Ethnicity", y="Percent of Kids in Consummated Adoptions", hue="Gender", kind="bar", data=df)
 # %%
@@ -140,8 +142,9 @@ df['Number of Total Kids'] = df['Number of Kids in Substitute Care'] + df['Numbe
 # %%
 count_plot = df.groupby(['Race/Ethnicity', 'Age Group']).sum()['Number of Total Kids']
 # %%
-count_plot = count_plot.reset_index(drop=False)
+# count_plot = count_plot.reset_index(drop=False)
 sns.barplot(y='Race/Ethnicity', x='Number of Total Kids', data=count_plot, hue='Age Group')
+plt.title('Count of Kids in CPS System by Race/Ethnicity')
 plt.legend(bbox_to_anchor=(1.01, 1),borderaxespad=0)
 # %%
 sns.countplot(x=df.groupby('Race/Ethnicity', 'Age Group').sum()['Number of Kids in Substitute Care'], data=df, hue='Age Group')
@@ -149,4 +152,16 @@ sns.countplot(x=df.groupby('Race/Ethnicity', 'Age Group').sum()['Number of Kids 
 ax = sns.catplot(x="Number of Total Kids", data=df, hue='Age Group', col='Race/Ethnicity')
 # %%
 df['Percent of Kids in Consummated Adoptions'].mean()
+# %%
+df.columns
+# %%
+df['Region'].value_counts()
+# %%
+df[(df['Race/Ethnicity']=='Anglo') & (df['Age Group'] == 'Six to Twelve Years Old') & (df['Gender'] == 'Female') & (df['Region'] == '10-El Paso')]
+# %%
+df[(df['Race/Ethnicity'] == 'Anglo') & (df['Gender'] == 'Female') & (df['Age Group'] == 'Six to Twelve Years Old') & (df['Fiscal Year'] == '2015')]
+# %%
+df['Age Group'].value_counts()
+# %%
+df.to_csv('data/df_justin.csv')
 # %%

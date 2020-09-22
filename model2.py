@@ -44,14 +44,14 @@ cols = [
     #    'Victims',
     #    'In Substitute Care with Non-Relative',
     #    'In Substitute Care with Relative', 
-    #    'Fiscal Year_2010',
-    #    'Fiscal Year_2011', 'Fiscal Year_2012', 'Fiscal Year_2013',
-    #    'Fiscal Year_2014', 'Fiscal Year_2015', 'Fiscal Year_2016',
-    #    'Fiscal Year_2017', 'Fiscal Year_2018', 'Fiscal Year_2019',
-    #    'Region_1-Lubbock', 'Region_10-El Paso', 'Region_11-Edinburg',
-    #    'Region_2-Abilene', 'Region_3-Arlington', 'Region_4-Tyler',
-    #    'Region_5-Beaumont', 'Region_6-Houston', 'Region_7-Austin',
-    #    'Region_8-San Antonio', 'Region_9-Midland',
+       'Fiscal Year_2010',
+       'Fiscal Year_2011', 'Fiscal Year_2012', 'Fiscal Year_2013',
+       'Fiscal Year_2014', 'Fiscal Year_2015', 'Fiscal Year_2016',
+       'Fiscal Year_2017', 'Fiscal Year_2018', 'Fiscal Year_2019',
+       'Region_1-Lubbock', 'Region_10-El Paso', 'Region_11-Edinburg',
+       'Region_2-Abilene', 'Region_3-Arlington', 'Region_4-Tyler',
+       'Region_5-Beaumont', 'Region_6-Houston', 'Region_7-Austin',
+       'Region_8-San Antonio', 'Region_9-Midland',
        'Race/Ethnicity_African American', 'Race/Ethnicity_Anglo',
     #    'Race/Ethnicity_Asian',
         'Race/Ethnicity_Hispanic',
@@ -81,6 +81,13 @@ linear_rmse = np.sqrt(metrics.mean_squared_error(y_test, y_pred_linear))
 print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred_linear))  
 print('Mean Squared Error:', metrics.mean_squared_error(y_test, y_pred_linear))  
 print('Root Mean Squared Error:', linear_rmse)
+# %%
+y_test.argmax()[:5]
+# %%
+arr = np.array(y_test)
+arr.argsort()[-3:][::-1]
+# %%
+X_test[83]
 # %%
 rf = RandomForestRegressor(n_estimators = 400, max_depth=5, random_state = 1, oob_score=True)
 rf.fit(X_train, y_train)
